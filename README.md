@@ -19,4 +19,8 @@ npm start
 
 ## Live Deployment
 
+https://react-wage-calculator.herokuapp.com/
 
+## License
+
+HourList201403.csv is copyrighted by Solinor. All external libaries are copyrighted by their respective authors. Everything else is given to the public domain.
