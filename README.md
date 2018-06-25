@@ -1,6 +1,6 @@
-# React Form App
+# React Wage Calculator
 
-A simple React wage calculator from the uploaded csv file. 
+A simple React wage calculator that reads the uploaded csv file. 
 
 No back end or test yet.
 
