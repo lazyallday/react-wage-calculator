@@ -15,30 +15,30 @@ class App extends Component {
 
   handleFileChosen = (e) => {
 
-    var fileReader = new FileReader();
+    let fileReader = new FileReader();
 
     if (this.state.employees !== undefined || this.state.employees.length !== 0) {
       document.getElementById('file').disabled = true;
     }
     try {
       fileReader.onload = () => {
-        var content = fileReader.result; //csv's data
+        let content = fileReader.result; //csv's data
 
-        var csvData = [];
-        var allLines = content.split(/\r\n|\n/);
-        var header = allLines[0].split(',');
+        let csvData = [];
+        let allLines = content.split(/\r\n|\n/);
+        let header = allLines[0].split(',');
 
         //Ignore the header in loop
-        for (var i = 1; i < allLines.length; i++) {
-          var data = allLines[i].split(',');
+        for (let i = 1; i < allLines.length; i++) {
+          let data = allLines[i].split(',');
 
           // Month+Year. don't know why it takes the hours also.
-          var time = allLines[1].split('.')[1] + '/' + allLines[1].split('.')[2];
+          let time = allLines[1].split('.')[1] + '/' + allLines[1].split('.')[2];
           var monthYear = time.substring(0, 6);
 
           if (data.length === header.length) {
-            var tarr = [];
-            for (var j = 0; j < header.length; j++) {
+            let tarr = [];
+            for (let j = 0; j < header.length; j++) {
               tarr.push(data[j]);
             }
             csvData.push(tarr);

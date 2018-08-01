@@ -3,19 +3,19 @@ import moment from 'moment';
 
 const HOURLYWAGE = 4.25;
 const EVECOMPEN = 1.25;
-var allData = [];
+let allData = [];
 
 export const WageCounter = props => {
-    var ids = [];
-    var rawData = props.employees;
+    let ids = [];
+    let rawData = props.employees;
 
     //Make an array about person's infor
-    for (var k = 1; k < rawData.length; k++) {
-        var id = parseInt(rawData[k][1]);
-        var name = rawData[k][0];
+    for (let k = 1; k < rawData.length; k++) {
+        let id = parseInt(rawData[k][1]);
+        let name = rawData[k][0];
         if (ids.indexOf(id) === -1) {
             ids.push(id);
-            var personData = {
+            let personData = {
                 'id': id,
                 'name': name,
                 'totalWage': 0,
@@ -29,14 +29,14 @@ export const WageCounter = props => {
         }
     }
 
-    for (var m = 1; m < rawData.length; m++) {
-        var dataRow = rawData[m];
-        var personId = dataRow[1];
+    for (let m = 1; m < rawData.length; m++) {
+        let dataRow = rawData[m];
+        let personId = dataRow[1];
 
-        var dateInfo = getDateInfo(dataRow);
-        for (var n = 0; n < allData.length; n++) {
+        let dateInfo = getDateInfo(dataRow);
+        for (let n = 0; n < allData.length; n++) {
             if (parseInt(allData[n].id) === parseInt(personId)) {
-                var dayTotals = calculateDayTotals(dateInfo.date, dateInfo.startTime, dateInfo.endTime);
+                let dayTotals = calculateDayTotals(dateInfo.date, dateInfo.startTime, dateInfo.endTime);
                 allData[n].totalWage += dayTotals.totalDayWage;
                 allData[n].totalHours += dayTotals.totalDayHours;
                 allData[n].overtimeHours += getOvertimeHours(dayTotals.totalDayHours);
@@ -79,15 +79,15 @@ export const WageCounter = props => {
 }
 
 function getDateInfo(dataRow) {
-    var rawDate = dataRow[2];
-    var rawStartTime = dataRow[3];
-    var rawEndTime = dataRow[4];
+    let rawDate = dataRow[2];
+    let rawStartTime = dataRow[3];
+    let rawEndTime = dataRow[4];
 
-    var date = moment(rawDate, 'DD-MM-YYYY');
-    var startTime = getStartTime(date, rawStartTime);
-    var endTime = getEndTime(date, startTime, rawEndTime);
+    let date = moment(rawDate, 'DD-MM-YYYY');
+    let startTime = getStartTime(date, rawStartTime);
+    let endTime = getEndTime(date, startTime, rawEndTime);
 
-    var converted = {
+    let converted = {
         'date': date,
         'startTime': startTime,
         'endTime': endTime,
@@ -97,21 +97,21 @@ function getDateInfo(dataRow) {
 }
 
 function getStartTime(date, rawStartTime) {
-    var startTimeData = rawStartTime.split(':'),
+    let startTimeData = rawStartTime.split(':'),
         startHour = parseInt(startTimeData[0]),
         startMinutes = parseInt(startTimeData[1]);
 
-    var startTime = date.clone().hour(startHour).minute(startMinutes);
+    let startTime = date.clone().hour(startHour).minute(startMinutes);
 
     return startTime;
 }
 
 function getEndTime(date, startTime, rawEndTime) {
-    var endTimeData = rawEndTime.split(':'),
+    let endTimeData = rawEndTime.split(':'),
         endHour = parseInt(endTimeData[0]),
         endMinutes = parseInt(endTimeData[1]);
 
-    var endTime;
+    let endTime;
 
     if (endHour < startTime.hour()) {
         endTime = date.clone().add(1, 'day').hour(endHour).minute(endMinutes);
@@ -123,13 +123,13 @@ function getEndTime(date, startTime, rawEndTime) {
 }
 
 function calculateDayTotals(date, startTime, endTime) {
-    var dayWage = 0;
+    let dayWage = 0;
 
     //minutes per day
-    var totalDayMinutes = endTime.diff(startTime, 'minutes');
+    let totalDayMinutes = endTime.diff(startTime, 'minutes');
 
     //convert minutes to hours
-    var totalDayHours = Math.round((totalDayMinutes / 60) * 100) / 100;
+    let totalDayHours = Math.round((totalDayMinutes / 60) * 100) / 100;
 
     dayWage += Math.round((totalDayHours * HOURLYWAGE) * 100) / 100;
 
@@ -137,22 +137,22 @@ function calculateDayTotals(date, startTime, endTime) {
     dayWage += Math.round(calculateOvertimePay(totalDayHours) * 100) / 100;
     dayWage += Math.round(calculateEveningPay(getEveningHours(date, startTime, endTime)) * 100) / 100;
 
-    var totals = { 'totalDayHours': totalDayHours, 'totalDayWage': dayWage };
+    let totals = { 'totalDayHours': totalDayHours, 'totalDayWage': dayWage };
 
     return totals;
 }
 
 function getOvertimeHours(totalDayHours) {
-    var normalHours = 8;
-    var overtime = totalDayHours - normalHours;
+    let normalHours = 8;
+    let overtime = totalDayHours - normalHours;
     if (overtime < 0) overtime = 0;
 
     return overtime;
 }
 
 function calculateOvertimePay(totalDayHours) {
-    var overtime = getOvertimeHours(totalDayHours);
-    var overtimePay = 0;
+    let overtime = getOvertimeHours(totalDayHours);
+    let overtimePay = 0;
 
     //for hours that exceed 8+4, add 100% pay
     if (overtime > 4) {
@@ -175,13 +175,13 @@ function calculateOvertimePay(totalDayHours) {
 }
 
 function getEveningHours(date, startTime, endTime) {
-    var startHour = 19;
-    var endHour = 6;
+    let startHour = 19;
+    let endHour = 6;
 
-    var eveningStart = date.clone().hour(startHour);
-    var eveningEnd = date.clone().add(1, 'day').hour(endHour);
+    let eveningStart = date.clone().hour(startHour);
+    let eveningEnd = date.clone().add(1, 'day').hour(endHour);
 
-    var eveningMinutes = 0;
+    let eveningMinutes = 0;
 
     if (startTime.isBetween(eveningStart, eveningEnd, '[]')) {
         if (endTime.isBetween(eveningStart, eveningEnd, '[]')) {
@@ -193,12 +193,12 @@ function getEveningHours(date, startTime, endTime) {
         eveningMinutes = endTime.diff(eveningStart, 'minutes');
     }
 
-    var eveningHours = Math.round((eveningMinutes / 60) * 100) / 100;
+    let eveningHours = Math.round((eveningMinutes / 60) * 100) / 100;
 
     return eveningHours;
 }
 
 function calculateEveningPay(eveningHours) {
-    var eveningPay = Math.round(eveningHours * EVECOMPEN *100) / 100;
+    let eveningPay = Math.round(eveningHours * EVECOMPEN *100) / 100;
     return eveningPay;
 }
